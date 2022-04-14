@@ -1,12 +1,17 @@
 const express = require('express');
 const auth = require("../middlware/authserver")
 const postcnt = require("../controllers/funding")
+const multer = require('multer')
 
 const router = new express.Router()
 
 router.get("/getallpost",postcnt.getallpost)
 
-router.post("/Addpost",auth,postcnt.addpost)
+const uplode  = multer({
+    dest: 'image'
+})
+
+router.post("/Addpost",uplode.single('upload'),auth,postcnt.addpost)
 
 router.get("/delpost/:id",auth,postcnt.deletepost)
 

@@ -1,6 +1,8 @@
 const postdata = require("../model/funding");
 const funddata = require("../model/Fund");
 
+
+
 exports.getallpost = async (req,res) => {
     try{
         const posts = await postdata.find()
@@ -15,6 +17,8 @@ exports.getallpost = async (req,res) => {
         //res.status(400).send(e)
     }
 }
+
+
 
 exports.addpost = async (req,res) => {
     const post = req.body;
