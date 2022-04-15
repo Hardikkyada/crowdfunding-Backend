@@ -18,8 +18,6 @@ exports.getallpost = async (req,res) => {
     }
 }
 
-
-
 exports.addpost = async (req,res) => {
     const post = req.body;
     
@@ -28,8 +26,14 @@ exports.addpost = async (req,res) => {
     }).catch((err) =>{
         return res.json({error : err.message})
     })
+}
 
-    
+exports.imgupload = async (req,res)=> {
+    try{
+        return res.status(200).json({data : "Add SuccessFully"})
+    }catch(e){
+        return res.status(400).json({error:e.message})
+    }
 }
 
 exports.deletepost = async (req,res) => {

@@ -11,7 +11,9 @@ const uplode  = multer({
     dest: 'image'
 })
 
-router.post("/Addpost",uplode.single('upload'),auth,postcnt.addpost)
+router.post("/Addpost",auth,postcnt.addpost)
+
+router.post("/Fileupload",uplode.single('upload'),auth,postcnt.imgupload)
 
 router.get("/delpost/:id",auth,postcnt.deletepost)
 
