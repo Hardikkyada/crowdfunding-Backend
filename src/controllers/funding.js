@@ -32,6 +32,7 @@ exports.imgupload = async (req,res)=> {
     try{
         return res.status(200).json({data : "Add SuccessFully"})
     }catch(e){
+
         return res.status(400).json({error:e.message})
     }
 }
@@ -91,4 +92,31 @@ exports.getpostbytopic = async (req,res) =>{
         return res.json({error : e.message})
         //res.status(400).send(e)
     }
+}
+
+exports.leftday = async (req,res)=> {
+    const id = req.params?.id;
+    try{
+        const posts = await postdata.findById(id)
+
+        if(posts.length === 0){
+            return res.json({data : "Data Not Found"})
+        }
+        const days = posts.totalday;
+        
+        const date = posts.createdAt.getTime()
+
+        const curdate = new Date().getTime()
+
+        const x = (curdate - date) 
+
+        const dayleft = Math.round(x / (24*60*60*1000))
+
+        
+        return res.json({data : (days - dayleft)})
+    }catch(e){
+        return res.json({error : e.message})
+        //res.status(400).send(e)
+    }
+
 }

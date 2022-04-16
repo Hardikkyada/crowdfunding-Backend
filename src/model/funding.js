@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
 
 const postschem = mongoose.Schema({
+    image:{
+        type:String,
+        unique:true,
+        required:true
+    },
+    title:{
+        type:String,
+        unique:true,
+        required:true
+    },
     desc:{
         type:String,
         unique:true,

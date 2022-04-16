@@ -7,18 +7,29 @@ const router = new express.Router()
 
 router.get("/getallpost",postcnt.getallpost)
 
-const uplode  = multer({
-    dest: 'image'
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'image/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now()+file.originalname)
+    }
 })
+
+var upload = multer({ storage: storage })
+
 
 router.post("/Addpost",auth,postcnt.addpost)
 
-router.post("/Fileupload",uplode.single('upload'),auth,postcnt.imgupload)
+router.post("/Fileupload",upload.single('upload'),auth,postcnt.imgupload)
 
 router.get("/delpost/:id",auth,postcnt.deletepost)
 
 router.get("/getpostbytopic/:topic",postcnt.getpostbytopic)
 
 router.get("/getpost/:id",postcnt.getpost)
+
+router.get("/dayleft/:id",postcnt.leftday)
 
 module.exports = router
