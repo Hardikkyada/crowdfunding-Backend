@@ -32,7 +32,6 @@ exports.imgupload = async (req,res)=> {
     try{
         return res.status(200).json({data : "Add SuccessFully"})
     }catch(e){
-
         return res.status(400).json({error:e.message})
     }
 }

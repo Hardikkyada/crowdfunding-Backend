@@ -56,6 +56,37 @@ exports.userlist  = async (req,res) => {
     }
 }
 
+exports.user  = async (req,res) => {
+    try{
+        return res.json({data:req.user})
+    }catch(e){
+        return res.json({error:e.message})
+    }
+}
+
+exports.edituser = async (req,res) => {
+    try{
+        await userdata.findByIdAndUpdate(req.params.id,req.body)
+
+        const data = await userdata.findById(req.params.id);
+
+        res.json({user : data })
+    }catch(e){
+        return res.status(404).send({error:e.message})
+    }
+}
+
+exports.deleteuser = async (req,res) => {
+    try{
+        const data = await userdata.findByIdAndDelete(req.params.id);
+
+        return res.json({data:data})
+
+    }catch(e){
+        return res.json({error:e.message})
+    }
+}
+
 exports.logout = async (req,res) => {
     res.status(200).send("Logout SuccessFulll")
 }
