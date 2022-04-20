@@ -67,9 +67,6 @@ exports.user  = async (req,res) => {
 
 exports.edituser = async (req,res) => {
     try{
-
-
-
         const user = JSON.parse(req.body.data)
 
         if(req.file)

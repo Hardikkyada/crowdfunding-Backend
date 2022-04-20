@@ -17,7 +17,10 @@ exports.getallpost = async (req,res) => {
 }
 
 exports.addpost = async (req,res) => {
+    
     const post = req.body;
+
+    post.user = req.user._id
     
     postdata.create(post).then(()=>{
         return res.json({data : post})
