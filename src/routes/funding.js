@@ -10,7 +10,7 @@ router.get("/getallpost",postcnt.getallpost)
 
 router.post("/Addpost",auth,postcnt.addpost)
 
-router.post("/Fileupload",upload.single('upload'),auth,postcnt.imgupload)
+router.post("/Fileupload",upload.single('upload'),postcnt.imgupload)
 
 router.get("/delpost/:id",auth,postcnt.deletepost)
 

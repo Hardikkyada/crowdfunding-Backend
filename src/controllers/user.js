@@ -1,3 +1,4 @@
+const Logger = require("nodemon/lib/utils/log");
 const userdata = require("../model/user");
 
 exports.login = async (req,res) => {
@@ -66,12 +67,24 @@ exports.user  = async (req,res) => {
 
 exports.edituser = async (req,res) => {
     try{
-        await userdata.findByIdAndUpdate(req.params.id,req.body)
+
+
+
+        const user = JSON.parse(req.body.data)
+
+        if(req.file)
+        {
+            user.ProfileImg = req.file?.filename
+        }
+
+        console.log(user);
+        
+        await userdata.findByIdAndUpdate(req.params.id,user)
 
         const data = await userdata.findById(req.params.id);
-
         res.json({user : data })
     }catch(e){
+        console.log(e);
         return res.status(404).send({error:e.message})
     }
 }

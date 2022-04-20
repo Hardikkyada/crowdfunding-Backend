@@ -1,8 +1,6 @@
 const postdata = require("../model/funding");
 const funddata = require("../model/Fund");
 
-
-
 exports.getallpost = async (req,res) => {
     try{
         const posts = await postdata.find()
@@ -30,8 +28,10 @@ exports.addpost = async (req,res) => {
 
 exports.imgupload = async (req,res)=> {
     try{
+        console.log(req.body,req.files);
         return res.status(200).json({data : "Add SuccessFully"})
     }catch(e){
+        console.log(e.message);
         return res.status(400).json({error:e.message})
     }
 }

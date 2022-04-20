@@ -20,7 +20,7 @@ router.get('/list' ,usercnt.userlist)
 
 // router.get('/Uplodeimg' ,usercnt.userlist)
 
-router.patch('/Updateuser/:id',auth,usercnt.edituser)
+router.patch('/Updateuser/:id',[upload.single("profile"),auth],usercnt.edituser)
 
 router.get('/Deleteuser/:id',auth ,usercnt.deleteuser)
 
