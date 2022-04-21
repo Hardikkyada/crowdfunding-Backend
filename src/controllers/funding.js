@@ -18,7 +18,14 @@ exports.getallpost = async (req,res) => {
 
 exports.addpost = async (req,res) => {
     
-    const post = req.body;
+    const post = JSON.parse(req.body.data)
+
+    if(req.file)
+    {
+        post.image = req.file?.filename
+    }
+
+    console.log(post);
 
     post.user = req.user._id
     
@@ -41,7 +48,6 @@ exports.imgupload = async (req,res)=> {
 
 exports.deletepost = async (req,res) => {
     const id = req.params.id;
-
     try{
         const posts = await postdata.findByIdAndDelete(id)
         if(posts){

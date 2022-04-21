@@ -8,11 +8,11 @@ const router = new express.Router()
 
 router.get("/getallpost",postcnt.getallpost)
 
-router.post("/Addpost",auth,postcnt.addpost)
+router.post("/Addpost",[auth,upload.single('upload')],postcnt.addpost)
 
-router.post("/Fileupload",upload.single('upload'),auth,postcnt.imgupload)
+router.post("/Fileupload",[auth,upload.single('upload')],postcnt.imgupload)
 
-router.get("/delpost/:id",auth,postcnt.deletepost)
+router.delete("/delpost/:id",auth,postcnt.deletepost)
 
 router.get("/getpostbytopic/:topic",postcnt.getpostbytopic)
 

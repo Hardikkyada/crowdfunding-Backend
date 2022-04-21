@@ -14,13 +14,13 @@ router.get('/test',(req,res)=> {
 
 router.post('/login',usercnt.login);
 
-router.post('/reg', usercnt.reg)
+router.post('/reg',upload.single("profile"),usercnt.reg)
 
 router.get('/list' ,usercnt.userlist)
 
 // router.get('/Uplodeimg' ,usercnt.userlist)
 
-router.patch('/Updateuser/:id',[upload.single("profile"),auth],usercnt.edituser)
+router.patch('/Updateuser/:id',[auth,upload.single("profile")],usercnt.edituser)
 
 router.get('/Deleteuser/:id',auth ,usercnt.deleteuser)
 

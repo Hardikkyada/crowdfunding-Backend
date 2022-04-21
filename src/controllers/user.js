@@ -36,7 +36,13 @@ exports.login = async (req,res) => {
 }
 
 exports.reg = async  (req,res) => {
-    const user = new userdata(req.body)
+    
+    const data = JSON.parse(req.body.data)
+
+    data.ProfileImg = req.file?.filename
+
+    const user = new userdata(data)
+
     try {
         await user.save()
         const token = await user.generateAuthToken()
@@ -58,6 +64,7 @@ exports.userlist  = async (req,res) => {
 }
 
 exports.user  = async (req,res) => {
+    console.log("dwfefr");
     try{
         return res.json({data:req.user})
     }catch(e){
