@@ -6,6 +6,8 @@ const router = new express.Router()
 
 router.get("/status",auth,fundcnt.status)
 
+router.get("/history/:id",auth,fundcnt.history)
+
 router.post("/Addfund",auth,fundcnt.addfund)
 
 router.get("/totalfund/:id",auth,fundcnt.Totalamount)

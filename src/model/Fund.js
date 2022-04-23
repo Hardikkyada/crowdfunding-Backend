@@ -11,11 +11,11 @@ const fundschem = mongoose.Schema({
         type:Number,
         required:true
     },
-    TranctionId:
-    {
-        type:String,
-        required:true
-    },
+    // TranctionId:
+    // {
+    //     type:String,
+    //     required:true
+    // },
     user:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,

@@ -16,6 +16,27 @@ exports.status = async (req,res) => {
     }
 }
 
+
+
+exports.history = async (req,res) => {
+    const userid = req.params.id
+    try{
+        const history = await funddata.findOne({user:userid})
+
+        if(history.length === 0){
+            return res.json({data : "Post List is Empty"})
+        }
+        
+        return res.json({data : history})
+ 
+    }catch(e){
+        return res.json({error : e.message})
+        //res.status(400).send(e)
+    }
+}
+
+
+
 exports.addfund = async (req,res) =>{
     const post = req.body;
     funddata.create(post).then(()=>{
@@ -35,8 +56,9 @@ exports.Totalamount = async (req,res)=>{
 
         total = await funddata.find({Fundpost:id})
 
+
         total.map((val,i)=> {
-            sum = total[i].Totalamount
+            sum += total[i].Totalamount
             
         })
 
