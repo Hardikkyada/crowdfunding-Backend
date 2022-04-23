@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const fundschem = mongoose.Schema({
+    
     Fundpost:{
         type:String,
         required:true,

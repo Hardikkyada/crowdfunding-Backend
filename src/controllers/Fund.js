@@ -21,12 +21,12 @@ exports.status = async (req,res) => {
 exports.history = async (req,res) => {
     const userid = req.params.id
     try{
-        const history = await funddata.findOne({user:userid})
+        const history = await funddata.find({user:userid}).populate("Fundpost")
 
         if(history.length === 0){
             return res.json({data : "Post List is Empty"})
         }
-        
+        console.log(history);
         return res.json({data : history})
  
     }catch(e){

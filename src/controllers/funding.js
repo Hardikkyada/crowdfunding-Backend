@@ -3,7 +3,7 @@ const funddata = require("../model/Fund");
 
 exports.getallpost = async (req,res) => {
     try{
-        const posts = await postdata.find()
+        const posts = await postdata.find().populate("topic")
 
         if(posts.length === 0){
             return res.json({data : "Post List is Empty"})
@@ -35,6 +35,32 @@ exports.addpost = async (req,res) => {
         return res.json({error : err.message})
     })
 }
+
+
+exports.editpost = async (req,res) => {
+
+    try{
+        const post = JSON.parse(req.body.data)
+
+        if(req.file)
+        {
+            post.ProfileImg = req.file?.filename
+        }
+
+        console.log(post);
+        
+        await postdata.findByIdAndUpdate(req.params.id,post)
+
+        const data = await postdata.findById(req.params.id);
+        
+        res.json({user : data })
+    }catch(e){
+        console.log(e);
+        return res.status(404).send({error:e.message})
+    }
+
+}
+
 
 exports.imgupload = async (req,res)=> {
     try{
@@ -72,6 +98,27 @@ exports.getpost = async(req,res) =>{
 
     try{
         const posts = await postdata.findOne({_id:id})
+
+        if(!posts){
+            return res.json({data : "Post Not Found"})
+        }
+        
+        return res.json({data : posts})
+    }catch(e){
+        return res.json({error : e.message})
+    }
+
+}
+
+exports.getpostbyuser = async(req,res) =>{
+    const id = req.params.id
+
+    if(!id){
+        return res.json({error : "Id in Params Not Found"})
+    }
+
+    try{
+        const posts = await postdata.find({user:id}).populate("topic")
 
         if(!posts){
             return res.json({data : "Post Not Found"})
