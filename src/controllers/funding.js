@@ -17,8 +17,11 @@ exports.getallpost = async (req,res) => {
 }
 
 exports.addpost = async (req,res) => {
+
+    console.log(req.body.data);
     
     const post = JSON.parse(req.body.data)
+    console.log(post);
 
     if(req.file)
     {
@@ -44,7 +47,7 @@ exports.editpost = async (req,res) => {
 
         if(req.file)
         {
-            post.ProfileImg = req.file?.filename
+            post.image = req.file?.filename
         }
 
         console.log(post);
@@ -114,19 +117,19 @@ exports.getpostbyuser = async(req,res) =>{
     const id = req.params.id
 
     if(!id){
-        return res.json({error : "Id in Params Not Found"})
+        return res.status(400).json({error : "Id in Params Not Found"})
     }
 
     try{
         const posts = await postdata.find({user:id}).populate("topic")
 
-        if(!posts){
-            return res.json({data : "Post Not Found"})
+        if(posts.length === 0){
+            return res.status(404).json({data : "Post Not Found"})
         }
         
-        return res.json({data : posts})
+        return res.status(200).json({data : posts})
     }catch(e){
-        return res.json({error : e.message})
+        return res.status(400).json({error : e.message})
     }
 
 }

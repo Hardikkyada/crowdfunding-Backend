@@ -5,13 +5,13 @@ exports.status = async (req,res) => {
         const posts = await funddata.find()
 
         if(posts.length === 0){
-            return res.json({data : "Post List is Empty"})
+            return res.status(404).json({data : "Post List is Empty"})
         }
         
-        return res.json({data : posts})
+        return res.status(200).json({data : posts})
  
     }catch(e){
-        return res.json({error : e.message})
+        return res.status(400).json({error : e.message})
         //res.status(400).send(e)
     }
 }
@@ -24,13 +24,13 @@ exports.history = async (req,res) => {
         const history = await funddata.find({user:userid}).populate("Fundpost")
 
         if(history.length === 0){
-            return res.json({data : "Post List is Empty"})
+            return res.status(404).json({data : "Post List is Empty"})
         }
         console.log(history);
-        return res.json({data : history})
+        return res.status(200).json({data : history})
  
     }catch(e){
-        return res.json({error : e.message})
+        return res.status(400).json({error : e.message})
         //res.status(400).send(e)
     }
 }
