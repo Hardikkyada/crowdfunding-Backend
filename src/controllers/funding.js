@@ -18,7 +18,7 @@ exports.getallpost = async (req,res) => {
 
 exports.addpost = async (req,res) => {
 
-    console.log(req.body.data);
+    console.log(req.body.data,"f",req.file);
     
     const post = JSON.parse(req.body.data)
     console.log(post);
@@ -41,6 +41,7 @@ exports.addpost = async (req,res) => {
 
 
 exports.editpost = async (req,res) => {
+    console.log(req.body.data);
 
     try{
         const post = JSON.parse(req.body.data)

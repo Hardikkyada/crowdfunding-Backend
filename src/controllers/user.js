@@ -36,6 +36,8 @@ exports.login = async (req,res) => {
 }
 
 exports.reg = async  (req,res) => {
+
+   console.log("sdfsder",req.body.data);
     
     const data = JSON.parse(req.body.data)
 
@@ -73,6 +75,7 @@ exports.user  = async (req,res) => {
 }
 
 exports.edituser = async (req,res) => {
+    console.log(req.body.data,"f",req.file);
     try{
         const user = JSON.parse(req.body.data)
 
