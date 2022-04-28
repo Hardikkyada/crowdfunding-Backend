@@ -8,7 +8,8 @@ const router = new express.Router()
 
 router.get("/getallpost",postcnt.getallpost)
 
-router.post("/Addpost",[auth,upload.single('upload')],postcnt.addpost)
+// router.post("/Addpost",[auth,upload.single('upload')],postcnt.addpost)
+router.post("/Addpost",auth,postcnt.addpost)
 
 router.patch("/Editpost/:id",[auth,upload.single('upload')],postcnt.editpost)
 

@@ -18,22 +18,22 @@ exports.getallpost = async (req,res) => {
 
 exports.addpost = async (req,res) => {
 
-    console.log(req.body.data,"f",req.file);
+    // console.log(req.body.data,"f",req.file);
     
-    const post = JSON.parse(req.body.data)
-    console.log(post);
+    // const post = JSON.parse(req.body.data)
+    // console.log(post);
 
-    if(req.file)
-    {
-        post.image = req.file?.filename
-    }
+    // if(req.file)
+    // {
+    //     post.image = req.file?.filename
+    // }
 
-    console.log(post);
+    console.log(req.body.user);
 
-    post.user = req.user._id
+    req.body.user = req.user._id
     
-    postdata.create(post).then(()=>{
-        return res.json({data : post})
+    postdata.create(req.body).then(()=>{
+        return res.json({data : req.body})
     }).catch((err) =>{
         return res.json({error : err.message})
     })
@@ -41,20 +41,20 @@ exports.addpost = async (req,res) => {
 
 
 exports.editpost = async (req,res) => {
-    console.log(req.body.data);
+    // console.log(req.body.data);
 
     try{
-        const post = JSON.parse(req.body.data)
+        // const post = JSON.parse(req.body.data)
 
-        if(req.file)
-        {
-            post.image = req.file?.filename
-        }
+        // if(req.file)
+        // {
+        //     post.image = req.file?.filename
+        // }
 
-        console.log(post);
+        // console.log(post);
         
-        await postdata.findByIdAndUpdate(req.params.id,post)
-
+        await postdata.findByIdAndUpdate(req.params.id,req.body)
+        
         const data = await postdata.findById(req.params.id);
         
         res.json({user : data })
