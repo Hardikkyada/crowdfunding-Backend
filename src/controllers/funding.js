@@ -32,8 +32,8 @@ exports.addpost = async (req,res) => {
 
     req.body.user = req.user._id
     
-    postdata.create(req.body).then(()=>{
-        return res.json({data : req.body})
+    postdata.create(req.body).then((data)=>{
+        return res.json({data : data})
     }).catch((err) =>{
         return res.json({error : err.message})
     })

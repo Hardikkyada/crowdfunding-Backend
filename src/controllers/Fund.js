@@ -36,11 +36,11 @@ exports.history = async (req,res) => {
 }
 
 
-
+ 
 exports.addfund = async (req,res) =>{
     const post = req.body;
-    funddata.create(post).then(()=>{
-        return res.json({data : post})
+    funddata.create(post).then((resdata)=>{
+        return res.json({data : resdata})
     }).catch((err) =>{
         return res.json({error : err.message})
     })

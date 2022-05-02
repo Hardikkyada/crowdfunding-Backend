@@ -11,7 +11,7 @@ router.get("/getallpost",postcnt.getallpost)
 // router.post("/Addpost",[auth,upload.single('upload')],postcnt.addpost)
 router.post("/Addpost",auth,postcnt.addpost)
 
-router.patch("/Editpost/:id",[auth,upload.single('upload')],postcnt.editpost)
+router.patch("/Editpost/:id",auth,postcnt.editpost)
 
 router.post("/Fileupload",[auth,upload.single('upload')],postcnt.imgupload)
 

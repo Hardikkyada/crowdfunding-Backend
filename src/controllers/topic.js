@@ -18,8 +18,8 @@ exports.getalltopic = async (req,res) => {
 exports.addtopic = async (req,res) => {
     const topic = req.body;
     
-    topicdata.create(topic).then(()=>{
-        return res.json({data : topic})
+    topicdata.create(topic).then((resdata)=>{
+        return res.json({data : resdata})
     }).catch((err) =>{
         return res.json({error : err.message})
     })
