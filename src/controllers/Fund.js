@@ -56,7 +56,6 @@ exports.Totalamount = async (req,res)=>{
 
         total = await funddata.find({Fundpost:id})
 
-
         total.map((val,i)=> {
             sum += total[i].Totalamount
             

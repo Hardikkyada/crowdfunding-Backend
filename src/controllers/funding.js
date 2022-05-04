@@ -55,7 +55,7 @@ exports.editpost = async (req,res) => {
         
         await postdata.findByIdAndUpdate(req.params.id,req.body)
         
-        const data = await postdata.findById(req.params.id);
+        const data = await postdata.findById(req.params.id).populate("topic");
         
         res.json({user : data })
     }catch(e){
