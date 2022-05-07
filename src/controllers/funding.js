@@ -1,181 +1,174 @@
-const postdata = require("../model/funding");
-const funddata = require("../model/Fund");
+const postdata = require('../model/funding');
+const funddata = require('../model/Fund');
 
-exports.getallpost = async (req,res) => {
-    try{
-        const posts = await postdata.find().populate("topic")
+exports.getallpost = async (req, res) => {
+  try {
+    const posts = await postdata.find().sort({createdAt: -1}).populate('topic');
 
-        if(posts.length === 0){
-            return res.json({data : "Post List is Empty"})
-        }
-        
-        return res.json({data : posts})
-    }catch(e){
-        return res.json({error : e.message})
-        //res.status(400).send(e)
+    if (posts.length === 0) {
+      return res.json({data: 'Post List is Empty'});
     }
-}
+    console.log(posts);
+    return res.json({data: posts});
+  } catch (e) {
+    return res.json({error: e.message});
+    //res.status(400).send(e)
+  }
+};
 
-exports.addpost = async (req,res) => {
+exports.addpost = async (req, res) => {
+  // console.log(req.body.data,"f",req.file);
 
-    // console.log(req.body.data,"f",req.file);
-    
+  // const post = JSON.parse(req.body.data)
+  // console.log(post);
+
+  // if(req.file)
+  // {
+  //     post.image = req.file?.filename
+  // }
+
+  console.log(req.body.user);
+
+  req.body.user = req.user._id;
+
+  postdata
+    .create(req.body)
+    .then(data => {
+      return res.json({data: data});
+    })
+    .catch(err => {
+      return res.json({error: err.message});
+    });
+};
+
+exports.editpost = async (req, res) => {
+  // console.log(req.body.data);
+
+  try {
     // const post = JSON.parse(req.body.data)
-    // console.log(post);
 
     // if(req.file)
     // {
     //     post.image = req.file?.filename
     // }
 
-    console.log(req.body.user);
+    // console.log(post);
 
-    req.body.user = req.user._id
-    
-    postdata.create(req.body).then((data)=>{
-        return res.json({data : data})
-    }).catch((err) =>{
-        return res.json({error : err.message})
-    })
-}
+    await postdata.findByIdAndUpdate(req.params.id, req.body);
 
+    const data = await postdata.findById(req.params.id).populate('topic');
 
-exports.editpost = async (req,res) => {
-    // console.log(req.body.data);
+    res.json({user: data});
+  } catch (e) {
+    console.log(e);
+    return res.status(404).send({error: e.message});
+  }
+};
 
-    try{
-        // const post = JSON.parse(req.body.data)
+exports.imgupload = async (req, res) => {
+  try {
+    console.log(req.body, req.files);
+    return res.status(200).json({data: 'Add SuccessFully'});
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json({error: e.message});
+  }
+};
 
-        // if(req.file)
-        // {
-        //     post.image = req.file?.filename
-        // }
+exports.deletepost = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const posts = await postdata.findByIdAndDelete(id);
+    if (posts) {
+      return res.json({data: 'Post is Deleted'});
+    } else {
+      return res.json({data: 'Post Not Found'});
+    }
+  } catch (e) {
+    return res.json({error: e.message});
+    //res.status(400).send(e)
+  }
+};
 
-        // console.log(post);
-        
-        await postdata.findByIdAndUpdate(req.params.id,req.body)
-        
-        const data = await postdata.findById(req.params.id).populate("topic");
-        
-        res.json({user : data })
-    }catch(e){
-        console.log(e);
-        return res.status(404).send({error:e.message})
+exports.getpost = async (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    return res.json({error: 'Id in Params Not Found'});
+  }
+
+  try {
+    const posts = await postdata.findOne({_id: id});
+
+    if (!posts) {
+      return res.json({data: 'Post Not Found'});
     }
 
-}
+    return res.json({data: posts});
+  } catch (e) {
+    return res.json({error: e.message});
+  }
+};
 
+exports.getpostbyuser = async (req, res) => {
+  const id = req.params.id;
 
-exports.imgupload = async (req,res)=> {
-    try{
-        console.log(req.body,req.files);
-        return res.status(200).json({data : "Add SuccessFully"})
-    }catch(e){
-        console.log(e.message);
-        return res.status(400).json({error:e.message})
-    }
-}
+  if (!id) {
+    return res.status(400).json({error: 'Id in Params Not Found'});
+  }
 
-exports.deletepost = async (req,res) => {
-    const id = req.params.id;
-    try{
-        const posts = await postdata.findByIdAndDelete(id)
-        if(posts){
-            return res.json({data : "Post is Deleted"})
-        }
-        else{
-            return res.json({data : "Post Not Found"})
-        }
+  try {
+    const posts = await postdata.find({user: id}).populate('topic');
 
-    }catch(e){
-        return res.json({error : e.message})
-        //res.status(400).send(e)
-    }
-}
-
-exports.getpost = async(req,res) =>{
-    const id = req.params.id
-
-    if(!id){
-        return res.json({error : "Id in Params Not Found"})
+    if (posts.length === 0) {
+      return res.status(404).json({data: 'Post Not Found'});
     }
 
-    try{
-        const posts = await postdata.findOne({_id:id})
-
-        if(!posts){
-            return res.json({data : "Post Not Found"})
-        }
-        
-        return res.json({data : posts})
-    }catch(e){
-        return res.json({error : e.message})
-    }
-
-}
-
-exports.getpostbyuser = async(req,res) =>{
-    const id = req.params.id
-
-    if(!id){
-        return res.status(400).json({error : "Id in Params Not Found"})
-    }
-
-    try{
-        const posts = await postdata.find({user:id}).populate("topic")
-
-        if(posts.length === 0){
-            return res.status(404).json({data : "Post Not Found"})
-        }
-        
-        return res.status(200).json({data : posts})
-    }catch(e){
-        return res.status(400).json({error : e.message})
-    }
-
-}
+    return res.status(200).json({data: posts});
+  } catch (e) {
+    return res.status(400).json({error: e.message});
+  }
+};
 
 //get post by topic
 
-exports.getpostbytopic = async (req,res) =>{
-    const topic = req.params?.topic;
+exports.getpostbytopic = async (req, res) => {
+  const topic = req.params?.topic;
 
-    try{
-        const posts = await postdata.find({ topic: topic});
+  try {
+    const posts = await postdata.find({topic: topic});
 
-        if(posts.length === 0){
-            return res.json({data : "Data Not Found"})
-        }  
-        return res.json({data : posts})
-    }catch(e){
-        return res.json({error : e.message})
-        //res.status(400).send(e)
+    if (posts.length === 0) {
+      return res.json({data: 'Data Not Found'});
     }
-}
+    return res.json({data: posts});
+  } catch (e) {
+    return res.json({error: e.message});
+    //res.status(400).send(e)
+  }
+};
 
-exports.leftday = async (req,res)=> {
-    const id = req.params?.id;
-    try{
-        const posts = await postdata.findById(id)
+exports.leftday = async (req, res) => {
+  const id = req.params?.id;
+  try {
+    const posts = await postdata.findById(id);
 
-        if(posts.length === 0){
-            return res.json({data : "Data Not Found"})
-        }
-        const days = posts.totalday;
-        
-        const date = posts.createdAt.getTime()
-
-        const curdate = new Date().getTime()
-
-        const x = (curdate - date) 
-
-        const dayleft = Math.round(x / (24*60*60*1000))
-
-        
-        return res.json({data : (days - dayleft)})
-    }catch(e){
-        return res.json({error : e.message})
-        //res.status(400).send(e)
+    if (posts.length === 0) {
+      return res.json({data: 'Data Not Found'});
     }
+    const days = posts.totalday;
 
-}
+    const date = posts.createdAt.getTime();
+
+    const curdate = new Date().getTime();
+
+    const x = curdate - date;
+
+    const dayleft = Math.round(x / (24 * 60 * 60 * 1000));
+
+    return res.json({data: days - dayleft});
+  } catch (e) {
+    return res.json({error: e.message});
+    //res.status(400).send(e)
+  }
+};
