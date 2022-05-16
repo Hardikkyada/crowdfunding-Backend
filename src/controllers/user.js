@@ -19,6 +19,7 @@ exports.login = async (req, res) => {
 
   try {
     user = await userdata.findOne({email: email, password: password});
+
     if (!user) {
       return res.status(400).json({data: 'user not found'});
     }
@@ -32,6 +33,30 @@ exports.login = async (req, res) => {
 
   //const token = await user.generateAuthToken()
   //res.send({user,token})
+};
+
+exports.googlelogin = async (req, res) => {
+  const data = req.body;
+  console.log(data);
+
+  let user = '';
+
+  try {
+    user = await userdata.findOne({email: data.email});
+    if (!user) {
+      const newuser = new userdata(data);
+      await newuser.save();
+      const token = await newuser.generateAuthToken();
+      return res.status(201).send({newuser, token});
+      // return res.status(400).json({data: 'user not found'});
+    } else {
+      const token = await user.generateAuthToken();
+      return res.status(201).send({user, token});
+    }
+  } catch (e) {
+    console.log(e.message);
+    res.status(400).send({error:e.message});
+  }
 };
 
 exports.reg = async (req, res) => {
@@ -63,7 +88,7 @@ exports.userlist = async (req, res) => {
 };
 
 exports.user = async (req, res) => {
-  console.log('dwfefr');
+  
   try {
     return res.json({data: req.user});
   } catch (e) {
@@ -86,7 +111,7 @@ exports.edituser = async (req, res) => {
     await userdata.findByIdAndUpdate(req.params.id, req.body);
 
     const data = await userdata.findById(req.params.id);
-    
+
     res.json({user: data});
   } catch (e) {
     console.log(e);

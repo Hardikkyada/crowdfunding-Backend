@@ -13,6 +13,8 @@ router.get('/test', (req, res) => {
 
 router.post('/login', usercnt.login);
 
+router.post('/googlelogin', usercnt.googlelogin);
+
 router.post('/reg', usercnt.reg);
 
 router.get('/list', usercnt.userlist);

@@ -1,18 +1,165 @@
 const postdata = require('../model/funding');
 const funddata = require('../model/Fund');
 
-exports.getallpost = async (req, res) => {
-  try {
-    const posts = await postdata.find().sort({createdAt: -1}).populate('topic');
+exports.getuserpost = async (req, res) => {
+    try {
+      const posts = await postdata
+        .find({user:req.params?.id})
+        .sort({createdAt: -1})
+        .populate('topic');
 
-    if (posts.length === 0) {
-      return res.json({data: 'Post List is Empty'});
+      if (posts.length === 0) {
+        return res.status(400).json({data: 'Post List is Empty'});
+      }
+      console.log(posts);
+      return res.json({data: posts});
+    } catch (e) {
+      return res.json({error: e.message});
+      //res.status(400).send(e)
     }
-    console.log(posts);
-    return res.json({data: posts});
-  } catch (e) {
-    return res.json({error: e.message});
-    //res.status(400).send(e)
+  }
+
+exports.getallpost = async (req, res) => {
+  if (req.params?.data === 'All') {
+    try {
+      let newdata = [];
+      const posts = await postdata.find().sort({amount: -1}).populate('topic');
+
+      if (posts.length === 0) {
+        return res.json({data: 'Post List is Empty'});
+      }
+
+      posts.map(i => {
+        const days = i.totalday;
+
+        const date = i.createdAt.getTime();
+
+        const curdate = new Date().getTime();
+
+        const x = curdate - date;
+
+        const dayleft = Math.round(x / (24 * 60 * 60 * 1000));
+
+        let newObj = JSON.parse(JSON.stringify(i));
+
+        newObj.dayleft = days - dayleft;
+
+        console.log(newObj);
+
+        newdata.push(newObj);
+      });
+      newdata = newdata.sort((a, b) => a.dayleft - b.dayleft);
+
+      const data = newdata.filter(i => i.dayleft > 0);
+
+      return res.json({data});
+    } catch (e) {
+      return res.json({error: e.message});
+      //res.status(400).send(e)
+    }
+  }  else if (req.params?.data === 'TargetAmount') {
+    try {
+      const posts = await postdata.find().sort({amount: -1}).populate('topic');
+
+      if (posts.length === 0) {
+        return res.status(400).json({data: 'Post List is Empty'});
+      }
+      console.log(posts);
+      return res.json({data: posts});
+    } catch (e) {
+      return res.json({error: e.message});
+      //res.status(400).send(e)
+    }
+  } else if (req.params?.data === 'RaiseAmount') {
+    let total = [];
+    let sum = 0;
+    let newobj = [];
+    try {
+      const posts = await postdata.find().populate('topic');
+
+      if (posts.length === 0) {
+        return res.status(400).json({data: 'Post List is Empty'});
+      }
+      total = await funddata.find().populate('Fundpost');
+
+      posts.map(postd => {
+        sum = 0;
+        total.map((val, i) => {
+          // console.log(postd.title === val.Fundpost.title);
+          if (val.Fundpost.title === postd.title) {
+            sum += total[i].Totalamount;
+          }
+        });
+        const x = JSON.parse(JSON.stringify(postd));
+        x.raiseamount = sum;
+        newobj.push(x);
+      });
+
+      newobj = newobj.sort((a, b) => a.raiseamount - b.raiseamount);
+
+      return res.json({data: newobj});
+    } catch (e) {
+      return res.json({error: e.message});
+      //res.status(400).send(e)
+    }
+
+    //   console.log(posts);
+    //   return res.json({data: posts});
+    // } catch (e) {
+    //   return res.json({error: e.message});
+    //   //res.status(400).send(e)
+    // }
+  } else if (req.params?.data === 'LeftTime') {
+    try {
+      let newdata = [];
+      const posts = await postdata.find().populate('topic');
+
+      if (posts.length === 0) {
+        return res.json({data: 'Post List is Empty'});
+      }
+
+      posts.map(i => {
+        const days = i.totalday;
+
+        const date = i.createdAt.getTime();
+
+        const curdate = new Date().getTime();
+
+        const x = curdate - date;
+
+        const dayleft = Math.round(x / (24 * 60 * 60 * 1000));
+
+        let newObj = JSON.parse(JSON.stringify(i));
+
+        newObj.dayleft = days - dayleft;
+
+        console.log(newObj);
+
+        newdata.push(newObj);
+      });
+      newdata = newdata.sort((a, b) => a.dayleft - b.dayleft);
+      return res.json({data: newdata});
+    } catch (e) {
+      return res.json({error: e.message});
+      //res.status(400).send(e)
+    }
+  } else {
+    const x = req.params?.data;
+    console.log(x);
+    try {
+      const posts = await postdata
+        .find({title: {$regex: req.params?.data, $options: 'i'}})
+        .populate('topic');
+
+      if (posts.length === 0) {
+        return res.status(404).json({data: 'Post List is Empty'});
+      }
+      console.log(posts);
+      return res.json({data: posts});
+    } catch (e) {
+      return res.json({error: e.message});
+      //res.status(400).send(e)
+    }
   }
 };
 
@@ -58,7 +205,7 @@ exports.editpost = async (req, res) => {
 
     const data = await postdata.findById(req.params.id).populate('topic');
 
-    res.json({user: data});
+    res.json({post: data});
   } catch (e) {
     console.log(e);
     return res.status(404).send({error: e.message});

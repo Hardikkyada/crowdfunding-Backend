@@ -6,7 +6,9 @@ const upload = require("../middlware/Uplodefile")
 
 const router = new express.Router()
 
-router.get("/getallpost",postcnt.getallpost)
+router.get("/getallpost/:data",postcnt.getallpost)
+
+router.get("/getuserPost/:id",postcnt.getuserpost)
 
 // router.post("/Addpost",[auth,upload.single('upload')],postcnt.addpost)
 router.post("/Addpost",auth,postcnt.addpost)

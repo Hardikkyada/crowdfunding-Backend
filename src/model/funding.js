@@ -1,44 +1,49 @@
 const mongoose = require('mongoose');
 
-const postschem = mongoose.Schema({
-    image:{
-        type:String,
-        unique:true,
-        required:true
+const postschem = mongoose.Schema(
+  {
+    image: {
+      type: String,
+      unique: true,
+      required: true,
     },
-    title:{
-        type:String,
-        unique:true,
-        required:true
+    title: {
+      type: String,
+      unique: true,
+      required: true,
     },
-    desc:{
-        type:String,
-        unique:true,
-        required:true
+    desc: {
+      type: String,
+      unique: true,
+      required: true,
     },
-    amount:
-    {
-        type:Number,
-        required:true
+    amount: {
+      type: Number,
+      required: true,
     },
-    totalday:{
-        type:Number,
-        required:true
+    totalday: {
+      type: Number,
+      required: true,
     },
-    topic:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:"topic"
+    topic: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'topic',
     },
-    
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:"user"
-    }
-},
-{ timestamps: true })
+    // dayleft:{
+    //     type:Number,
+    //     require:true
+    // },
 
-const postmodel = mongoose.model("Fundingpost",postschem,"Fundingpost")
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'user',
+    },
+  },
+  {timestamps: true},
+);
 
-module.exports = postmodel
+const postmodel = mongoose.model('Fundingpost', postschem, 'Fundingpost');
+
+module.exports = postmodel;
