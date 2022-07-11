@@ -4,22 +4,31 @@ const app = express()
 const port = process.env.PORT
 
 const mongoose = require('mongoose')
+const cors = require('cors');
 
+mongoose.connect("mongodb+srv://hardik:1234@cluster0.pocze.mongodb.net/CROWDFUNDING?retryWrites=true&w=majority").then(() => {
+    console.log("connected mongodb");
+})
+
+const corsOpts = {
+    origin: '*',
+
+    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
+
+    allowedHeaders: '*',
+};
+
+app.use(cors(corsOpts));
 app.use(express.json())
 
 app.use(express.static('public')); 
 app.use('/image', express.static('image'));
 
-mongoose.connect("mongodb://127.0.0.1:27017/CROWDFUNDING").then(()=>{
-    console.log("connected mongodb");
-})
 
 const userrouter = require("./src/routes/user")
 const fundingrouter = require("./src/routes/funding")
 const fundrouter = require("./src/routes/Fund")
 const topicrouter = require("./src/routes/topic")
-
-
 
 app.use(userrouter)
 app.use(fundrouter)
