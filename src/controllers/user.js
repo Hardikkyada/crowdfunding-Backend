@@ -18,6 +18,8 @@ exports.login = async (req, res) => {
   let user = "";
 
   try {
+    const useremail = await userdata.findOne({ email: email });
+    
     if (!useremail) {
       return res
         .status(404)
