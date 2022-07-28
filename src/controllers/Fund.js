@@ -82,7 +82,13 @@ exports.Totalsupports = async (req, res) => {
     const x = await funddata.find({ Fundpost: id }).populate("user");
 
     x.map((val, i) => {
-      total.push(val.user);
+      let newObj = JSON.parse(JSON.stringify(val.user));
+
+      newObj.Totalamount = val.Totalamount;
+
+      console.log(newObj);
+
+      total.push(newObj);
     });
 
     return res.json({ data: total });
