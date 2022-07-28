@@ -1,15 +1,17 @@
-const express = require('express');
-const auth = require("../middlware/authserver")
-const fundcnt = require("../controllers/Fund")
+const express = require("express");
+const auth = require("../middlware/authserver");
+const fundcnt = require("../controllers/Fund");
 
-const router = new express.Router()
+const router = new express.Router();
 
-router.get("/status",auth,fundcnt.status)
+router.get("/status", auth, fundcnt.status);
 
-router.get("/history/:id",auth,fundcnt.history)
+router.get("/history/:id", auth, fundcnt.history);
 
-router.post("/Addfund",auth,fundcnt.addfund)
+router.post("/Addfund", auth, fundcnt.addfund);
 
-router.get("/totalfund/:id",auth,fundcnt.Totalamount)
+router.get("/totalfund/:id", auth, fundcnt.Totalamount);
 
-module.exports = router
+router.get("/totalsupports/:id", fundcnt.Totalsupports);
+
+module.exports = router;
