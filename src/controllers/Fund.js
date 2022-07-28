@@ -79,9 +79,9 @@ exports.Totalsupports = async (req, res) => {
   let sum = 0;
 
   try {
-    total = await funddata.find({ Fundpost: id }).populate("user");
+    const x = await funddata.find({ Fundpost: id }).populate("user");
 
-    total.map((val, i) => {
+    x.map((val, i) => {
       total.push(val.user);
     });
 
